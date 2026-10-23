@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAEL MODS — Gerador de Keys</title>
+<style>
+:root{--bg:#0b1020;--panel:#1d293d;--panel2:#24334a;--line:#34445b;--text:#e7edf7;--muted:#9aa9bf;--purple:#5745e8;--blue:#2563eb;--green:#20bf75;--yellow:#f3c623;--red:#e54b5b;--orange:#f27a25}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select{font:inherit}button{border:0;border-radius:9px;padding:11px 14px;color:white;background:var(--purple);font-weight:700;cursor:pointer}button:hover{filter:brightness(1.1)}button.secondary{background:#3a4659}button.pink{background:linear-gradient(100deg,#783de8,#db247b)}button.red{background:#b52d40}button.orange{background:#d95610}button.blue{background:#2461e9}
+.app{display:flex;min-height:100vh}.sidebar{width:245px;flex-shrink:0;background:#1d2a40;border-right:2px solid #6554f2;padding:22px 15px;display:flex;flex-direction:column;gap:8px}.brand{font-size:23px;font-weight:900;letter-spacing:1px;padding:0 12px 22px;border-bottom:1px solid #33435b;margin-bottom:10px}.brand span{color:#8877ff}.nav{display:block;text-align:left;background:transparent;color:#cbd6e6;padding:14px;border-radius:10px}.nav.active{background:linear-gradient(100deg,#5547ed,#4334c5)}.userbox{margin-top:auto;background:#2a3851;border:1px solid #42516a;border-radius:16px;padding:14px}.balance{background:#3b4656;padding:12px;border-radius:10px;margin-top:10px;color:#b7f4d2}.balance small{display:block;color:#a8b8cd}.main{flex:1;min-width:0;padding:24px;max-width:1500px;margin:auto;width:100%}.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}.sub{color:var(--muted);margin-top:4px}.stats{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:12px;margin-bottom:18px}.stat,.panel,.tablewrap{background:var(--panel);border:1px solid #26354a;border-radius:12px}.stat{padding:17px}.stat .label{color:var(--muted);font-size:12px}.stat .num{font-size:23px;font-weight:800;margin-top:5px}.green{color:var(--green)}.yellow{color:var(--yellow)}.redtext{color:#ff7885}.muted{color:var(--muted)}.panel{padding:16px;margin-bottom:18px}.actions{display:flex;gap:9px;flex-wrap:wrap}.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-top:16px}.field label{display:block;color:#b8c5d7;font-size:12px;margin-bottom:7px}.field input,.field select{width:100%;background:#172236;border:1px solid #34445b;border-radius:8px;padding:11px;color:var(--text);outline:none}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:850px}th{background:#304057;color:#dce6f5;text-align:left;font-size:12px}td,th{padding:13px 12px;border-bottom:1px solid #2b3a50}td{font-size:13px}tbody tr:hover{background:#24334a}.keyname{font-weight:800;letter-spacing:.4px}.small{font-size:11px;color:var(--muted);margin-top:4px}.pill{display:inline-block;border-radius:20px;padding:4px 9px;font-size:11px;font-weight:800;background:#214c43;color:#66e6ad}.pill.inactive{background:#394454;color:#b4c0d0}.pill.paused{background:#563f29;color:#ffb15e}.rowactions{display:flex;gap:6px;flex-wrap:wrap}.rowactions button{padding:7px 9px;font-size:11px}.iconbtn{background:#51303d;padding:7px 9px}.empty{text-align:center;color:var(--muted);padding:35px}.foot{color:#7f8da2;text-align:center;font-size:12px;padding:18px}
+.modalback{position:fixed;inset:0;background:#030611c9;display:none;align-items:center;justify-content:center;padding:16px;z-index:10;overflow:auto}.modalback.show{display:flex}.modal{width:min(560px,100%);max-height:94vh;overflow:auto;background:#202d42;border:1px solid #465675;border-radius:14px;padding:20px;box-shadow:0 25px 80px #0009}.modalhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.modalhead h2{font-size:18px;margin:0}.x{background:transparent;color:#aab8ca;font-size:20px;padding:0 5px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.summary{background:#17233a;border:1px solid #2f405e;border-radius:10px;padding:12px;margin:15px 0;color:#b8c7db;font-size:12px;line-height:1.9}.summary strong{color:#5ce2a2}.modalbuttons{display:flex;gap:10px}.modalbuttons button{flex:1}.manage-section{background:#2b3a50;padding:13px;border-radius:10px;margin:12px 0}.manage-section h3{font-size:13px;margin:0 0 10px}.manage-section input{width:100%;background:#172236;border:1px solid #40516b;border-radius:7px;color:white;padding:10px;margin-bottom:8px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#263b35;color:#8ff0bd;border:1px solid #39775c;padding:12px 18px;border-radius:10px;display:none;z-index:20;max-width:90%;text-align:center}
+@media(max-width:1000px){.sidebar{width:190px}.stats{grid-template-columns:repeat(3,1fr)}.main{padding:16px}}
+@media(max-width:650px){.app{display:block}.sidebar{width:100%;padding:12px;display:block;border-right:0;border-bottom:2px solid #6554f2}.brand{padding:5px 8px 12px;margin:0 0 8px;font-size:20px}.navs{display:flex;overflow:auto;gap:5px}.nav{white-space:nowrap;padding:10px 12px;font-size:12px}.userbox{display:none}.main{padding:12px}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.stat{padding:12px}.stat .num{font-size:20px}.filters{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.topline h1{font-size:21px}.panel{padding:12px}}
+
+.login-screen{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,#0b1020,#1d2a40);display:flex;align-items:center;justify-content:center;padding:18px}
+.login-card{width:min(390px,100%);background:#1d293d;border:1px solid #465675;border-radius:16px;padding:25px;box-shadow:0 20px 60px #0008}
+.login-logo{text-align:center;font-size:27px;font-weight:900;margin-bottom:5px}.login-logo span{color:#9182ff}
+.login-card p{text-align:center;color:#9baac0;margin:0 0 20px}.login-card label{display:block;color:#bac8da;font-size:12px;margin:12px 0 6px}
+.login-card input{width:100%;padding:12px;background:#152137;color:#e9eff8;border:1px solid #354760;border-radius:8px}
+.login-card button{width:100%;margin-top:16px}.login-error{display:none;color:#ff8994;font-size:12px;margin-top:10px}
+
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+ <form class="login-card" onsubmit="return loginSubmit(event)">
+  <div class="login-logo"><span>FAEL</span> MODS</div>
+  <p>Entre no painel para continuar</p>
+  <label for="loginUser">Usuário</label><input id="loginUser" autocomplete="username" placeholder="Digite seu usuário" required>
+  <label for="loginPass">Senha</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="Digite sua senha" required>
+  <button type="submit">Entrar</button>
+  <div class="login-error" id="loginError">Usuário ou senha incorretos.</div>
+ </form>
+</div>
+
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><span>FAEL</span> MODS</div>
+  <div class="navs">
+    <button class="nav active" data-page="Dashboard">◉ Dashboard</button>
+    <button class="nav" data-page="Keys">♟ Keys</button>
+    <button class="nav" data-page="Logins Online">● Logins Online</button>
+    <button class="nav" data-page="Gerenciar Logins">⇥ Gerenciar Logins</button>
+    <button class="nav" data-page="Produtos">◆ Produtos</button>
+    <button class="nav" data-page="API Config">⚿ API Config</button>
+    <button class="nav" data-page="Créditos">🪙 Créditos</button>
+  </div>
+  <div class="userbox"><b>♟ Cliente022</b><div class="sub">Vendedor</div><div class="balance"><small>Saldo atual 1</small><b id="sideBalance">R$ 1.032,50</b></div><div class="balance"><small>Saldo atual 2</small><b>R$ 0,00</b></div></div>
+</aside>
+<main class="main">
+  <div id="keysPage">
+  <div class="topline"><div><h1 id="pageTitle" style="margin:0">Lista de Keys</h1><div class="sub">Gerencie e crie keys para seus produtos</div></div><div class="actions"><button onclick="openCreate(false)">♟ Criar Acesso</button><button class="pink" onclick="openCreate(true)">✎ Gerar em Lote</button></div></div>
+  <section class="stats">
+    <div class="stat"><div class="label">Total</div><div class="num" id="total">0</div></div>
+    <div class="stat"><div class="label">Inativos</div><div class="num muted" id="inactive">0</div></div>
+    <div class="stat"><div class="label">Ativos</div><div class="num green" id="active">0</div></div>
+    <div class="stat"><div class="label">Expirados</div><div class="num yellow" id="expired">0</div></div>
+    <div class="stat"><div class="label">Banidos</div><div class="num redtext" id="banned">0</div></div>
+    <div class="stat"><div class="label">Pausados</div><div class="num" style="color:#ffad5a" id="paused">0</div></div>
+  </section>
+  <section class="panel">
+    <div class="actions"><button onclick="openCreate(false)">＋ Criar acesso</button><button class="pink" onclick="openCreate(true)">✎ Gerar em lote</button></div>
+    <div class="filters">
+      <div class="field"><label>⌕ Buscar Key</label><input id="search" placeholder="Digite o nome da key..." oninput="render()"></div>
+      <div class="field"><label>⚑ Status</label><select id="statusFilter" onchange="render()"><option value="Todos">Todos</option><option>Ativo</option><option>Inativo</option><option>Pausado</option><option>Banido</option><option>Expirado</option></select></div>
+      <div class="field"><label>☷ Por página</label><select id="perPage" onchange="render()"><option>10</option><option>25</option><option>50</option><option>100</option></select></div>
+    </div>
+  </section>
+  <div class="tablewrap"><table><thead><tr><th>Key</th><th>Produto</th><th>Registrado em</th><th>Expira em</th><th>Dias restantes</th><th>Status</th><th>Ações</th></tr></thead><tbody id="keysBody"></tbody></table><div class="foot" id="foot">Nenhuma key criada ainda.</div></div>
+  </div>
+  <section id="otherPage" class="panel" style="display:none;margin-top:18px"></section>
+</main>
+</div>
+<div class="modalback" id="createModal"><div class="modal">
+  <div class="modalhead"><h2 id="createTitle">♟ Criar acesso</h2><button class="x" onclick="closeModal('createModal')">×</button></div>
+  <div class="formgrid">
+    <div class="field" id="quantityWrap" style="display:none"><label>Quantidade (máximo 100)</label><input type="number" id="quantity" value="5" min="1" max="100" oninput="updateCost()"></div>
+    <div class="field"><label>Produto e versão</label><select id="product"><option>Apk Mod Safe 1.0</option><option>Apk Mod Safe Normal 1.0</option><option>ApkMod Brutal 1.0</option><option>Bypass Replay 1.0</option><option>Mod Proxy 1.0</option></select></div>
+    <div class="field"><label>Dias disponíveis</label><select id="days" onchange="updateCost()"><option value="1">1 dia — R$ 10,00</option><option value="3">3 dias — R$ 15,00</option><option value="7" selected>7 dias — R$ 20,00</option><option value="10">10 dias — R$ 25,00</option><option value="30">30 dias — R$ 40,00</option></select></div>
+  </div>
+  <div class="summary">Saldo atual 1: <strong id="balance1">R$ 1.032,50</strong><br>Saldo atual 2: R$ 0,00<br>Custo total: <strong id="cost">R$ 20,00</strong><br>Saldo após criação: <strong id="after">R$ 1.012,50</strong><br><span class="muted">Keys serão criadas como inativas e pausadas.</span></div>
+  <div class="modalbuttons"><button onclick="createKeys()">✎ Gerar</button><button class="secondary" onclick="closeModal('createModal')">Cancelar</button></div>
+</div></div>
+<div class="modalback" id="manageModal"><div class="modal">
+  <div class="modalhead"><h2>♟ Gerenciar Usuário</h2><button class="x" onclick="closeModal('manageModal')">×</button></div>
+  <div class="summary" id="manageInfo"></div>
+  <div class="manage-section"><h3>🔑 Alterar Senha</h3><input id="newPassword" placeholder="Nova senha"><button class="orange" onclick="changePassword()">Alterar senha</button></div>
+  <div class="manage-section"><h3>⟳ Reset HWID</h3><div class="sub" style="margin-bottom:8px">Simulação local de reset de hardware.</div><button class="pink" onclick="notify('HWID resetado nesta demonstração.')">Resetar HWID</button></div>
+  <div class="manage-section"><h3>▣ Adicionar Dias</h3><input type="number" id="addDays" min="1" value="7"><button class="blue" onclick="changeDays(1)">＋ Adicionar dias</button></div>
+  <div class="manage-section"><h3>▣ Remover Dias</h3><input type="number" id="removeDays" min="1" value="1"><button class="red" onclick="changeDays(-1)">− Remover dias</button></div>
+  <div class="modalbuttons"><button class="secondary" onclick="closeModal('manageModal')">Fechar</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+const prices={1:10,3:15,7:20,10:25,30:40};
+let balance=1032.50, keys=[], selectedKey=null, batch=false, currentUser='';
+function stateKey(){return 'devid_keys_state_v1_'+currentUser.toLowerCase()}
+function saveUserState(){if(!currentUser)return;try{localStorage.setItem(stateKey(),JSON.stringify({balance,keys}))}catch(e){}}
+function loadUserState(){try{const d=JSON.parse(localStorage.getItem(stateKey())||'null');if(d&&Array.isArray(d.keys)){balance=Number(d.balance)||0;keys=d.keys.map(k=>({...k,created:new Date(k.created),expires:new Date(k.expires)}));render();return true}}catch(e){}return false}
+const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const dateStr=d=>new Date(d).toLocaleDateString('pt-BR');
+function makeKey(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='HG-';for(let i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s}
+function datePlus(d){let x=new Date();x.setDate(x.getDate()+d);return x}
+function seed(){keys=[{id:1,name:'HG-JDSEGB',product:'Apk Mod Safe 1.0',created:new Date(),expires:datePlus(9),status:'Ativo',password:''},{id:2,name:'HG-LQQLSZ',product:'Apk Mod Safe Normal 1.0',created:new Date(),expires:datePlus(1),status:'Inativo',password:''},{id:3,name:'HG-IRAGFG',product:'Apk Mod Safe 1.0',created:new Date(),expires:datePlus(3),status:'Ativo',password:''},{id:4,name:'HG-CCKJX',product:'Apk Mod Safe 1.0',created:new Date(),expires:datePlus(2),status:'Ativo',password:''},{id:5,name:'HG-IQNOTF',product:'Bypass Replay 1.0',created:new Date(),expires:datePlus(1),status:'Pausado',password:''}];saveUserState();render()}
+function remaining(k){return Math.ceil((new Date(k.expires).setHours(23,59,59)-new Date().getTime())/86400000)}
+function render(){
+ const q=(document.getElementById('search').value||'').toLowerCase(), filter=document.getElementById('statusFilter').value;
+ const visible=keys.filter(k=>(k.name.toLowerCase().includes(q)||k.product.toLowerCase().includes(q))&&(filter==='Todos'||(remaining(k)<0?'Expirado':k.status)===filter));
+ document.getElementById('total').textContent=keys.length;
+ document.getElementById('active').textContent=keys.filter(k=>k.status==='Ativo'&&remaining(k)>=0).length;
+ document.getElementById('inactive').textContent=keys.filter(k=>k.status==='Inativo').length;
+ document.getElementById('paused').textContent=keys.filter(k=>k.status==='Pausado').length;
+ document.getElementById('banned').textContent=keys.filter(k=>k.status==='Banido').length;
+ document.getElementById('expired').textContent=keys.filter(k=>remaining(k)<0).length;
+ const n=Number(document.getElementById('perPage').value)||10, shown=visible.slice(0,n);
+ document.getElementById('keysBody').innerHTML=shown.map(k=>{let r=remaining(k),s=r<0?'Expirado':k.status, cls=s==='Ativo'?'':s==='Pausado'?'paused':'inactive';return `<tr><td><div class="keyname">${k.name}</div><div class="small">ID: ${k.id}</div></td><td>${k.product}<div class="small">Produto</div></td><td>${dateStr(k.created)}<div class="small">${new Date(k.created).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</div></td><td>${dateStr(k.expires)}<div class="small">${new Date(k.expires).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</div></td><td class="${r<=3?'yellow':'green'}">${Math.max(0,r)} dias</td><td><span class="pill ${cls}">${s}</span></td><td><div class="rowactions"><button class="blue" onclick="openManage(${k.id})">⚙ Gerenciar</button><button class="iconbtn" title="Ativar/pausar" onclick="toggleKey(${k.id})">${k.status==='Ativo'?'⏸':'▶'}</button><button class="iconbtn" title="Excluir" onclick="deleteKey(${k.id})">▣</button></div></td></tr>`}).join('');
+ document.getElementById('foot').textContent=visible.length?`Mostrando ${shown.length} de ${visible.length} keys`:'Nenhuma key encontrada.';
+ document.getElementById('sideBalance').textContent=brl(balance);document.getElementById('balance1').textContent=brl(balance);
+}
+function openCreate(isBatch){batch=isBatch;document.getElementById('createTitle').textContent=isBatch?'♟ Gerar Usuários em Lote':'♟ Criar acesso';document.getElementById('quantityWrap').style.display=isBatch?'block':'none';document.getElementById('quantity').value=isBatch?5:1;document.getElementById('createModal').classList.add('show');updateCost()}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function updateCost(){let qty=batch?Math.min(100,Math.max(1,Number(document.getElementById('quantity').value)||1)):1;let cost=prices[document.getElementById('days').value]*qty;document.getElementById('cost').textContent=brl(cost);document.getElementById('after').textContent=brl(balance-cost)}
+async function createKeys(){let qty=batch?Math.min(100,Math.max(1,Number(document.getElementById('quantity').value)||1)):1,days=Number(document.getElementById('days').value),cost=prices[days]*qty;if(cost>balance){notify('Saldo insuficiente para esta operação.');return}const fresh=[];for(let i=0;i<qty;i++)fresh.push({id:Date.now()+i,name:makeKey(),product:document.getElementById('product').value,created:new Date().toISOString(),expires:datePlus(days).toISOString(),status:'Inativo',password:'',owner:currentUser});try{const res=await fetch('/api/keys',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({keys:fresh})});if(!res.ok)throw new Error('server');}catch(e){notify('Servidor indisponível: keys não foram sincronizadas.');return}balance-=cost;keys.unshift(...fresh.map(k=>({...k,created:new Date(k.created),expires:new Date(k.expires)})));closeModal('createModal');saveUserState();render();notify(`${qty} key(s) criada(s) e sincronizada(s) no servidor.`)}
+function openManage(id){selectedKey=keys.find(k=>k.id===id);if(!selectedKey)return;document.getElementById('manageInfo').innerHTML=`Usuário: <b>${selectedKey.name}</b><br>Produto: <b>${selectedKey.product}</b><br>Status: <b>${selectedKey.status}</b><br>Expira em: <b>${dateStr(selectedKey.expires)}</b>`;document.getElementById('newPassword').value='';document.getElementById('manageModal').classList.add('show')}
+function changePassword(){if(!selectedKey)return;let p=document.getElementById('newPassword').value;if(!p){notify('Digite uma senha primeiro.');return}selectedKey.password=p;saveUserState();notify('Senha alterada para este usuário.');closeModal('manageModal')}
+function changeDays(sign){if(!selectedKey)return;let n=Number(document.getElementById(sign===1?'addDays':'removeDays').value);if(!n||n<1){notify('Informe uma quantidade de dias válida.');return}let d=new Date(selectedKey.expires);d.setDate(d.getDate()+sign*n);selectedKey.expires=d;saveUserState();document.getElementById('manageInfo').innerHTML=`Usuário: <b>${selectedKey.name}</b><br>Produto: <b>${selectedKey.product}</b><br>Status: <b>${selectedKey.status}</b><br>Expira em: <b>${dateStr(selectedKey.expires)}</b>`;render();notify('Validade atualizada localmente.')}
+async function toggleKey(id){let k=keys.find(x=>x.id===id);if(!k)return;const next=k.status==='Ativo'?'Pausado':'Ativo';try{const res=await fetch('/api/keys/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k.name,status:next})});if(!res.ok)throw new Error('server')}catch(e){notify('Não foi possível atualizar no servidor.');return}k.status=next;saveUserState();render();notify('Status atualizado no servidor.') }
+async function deleteKey(id){if(!confirm('Excluir esta key? Ela também será removida do servidor.'))return;const k=keys.find(x=>x.id===id);if(!k)return;try{const res=await fetch('/api/keys/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k.name})});if(!res.ok)throw new Error('server')}catch(e){notify('Não foi possível excluir no servidor.');return}keys=keys.filter(x=>x.id!==id);saveUserState();render();notify('Key removida do servidor.') }
+function notify(msg){let t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2600)}
+function switchPage(page){
+ const keysPage=document.getElementById('keysPage'), other=document.getElementById('otherPage');
+ const title=document.getElementById('pageTitle');
+ keysPage.style.display=page==='Keys'?'block':'none';
+ other.style.display=page==='Keys'?'none':'block';
+ title.textContent=page==='Keys'?'Lista de Keys':page;
+ if(page==='Keys') return;
+ const content={
+  'Dashboard':`<h2>Dashboard</h2><p class="sub">Resumo do seu gerador FAEL MODS.</p><div class="stats"><div class="stat"><div class="label">Total de keys</div><div class="num">${keys.length}</div></div><div class="stat"><div class="label">Keys ativas</div><div class="num green">${keys.filter(k=>k.status==='Ativo'&&remaining(k)>=0).length}</div></div><div class="stat"><div class="label">Saldo atual</div><div class="num">${brl(balance)}</div></div></div><button onclick="switchPage('Keys')">Abrir gerador de Keys</button>`,
+  'Logins Online':`<h2>Logins Online</h2><p class="sub">Esta demonstração não possui conexão com um servidor para consultar sessões online em tempo real.</p><p>Usuário conectado: <b>${currentUser||'—'}</b></p>`,
+  'Gerenciar Logins':`<h2>Gerenciar Logins</h2><p class="sub">O cadastro de usuários e senhas é feito no painel FAEL MODS.</p><p>Use o painel FAEL MODS para criar, editar ou bloquear acessos. Este gerador aceita os logins cadastrados e armazena as keys por usuário.</p>`,
+  'Produtos':`<h2>Produtos</h2><p class="sub">Produtos disponíveis para gerar keys.</p><ul><li>Apk Mod Safe 1.0</li><li>Apk Mod Safe Normal 1.0</li><li>ApkMod Brutal 1.0</li><li>Bypass Replay 1.0</li><li>Mod Proxy 1.0</li></ul><button onclick="switchPage('Keys')">Voltar ao gerador</button>`,
+  'API Config':`<h2>API Config</h2><p class="sub">Configuração demonstrativa.</p><p>Este gerador usa a API compartilhada do servidor atual para registrar keys e sincronizar seu status com o painel.</p>`,
+  'Créditos':`<h2>Créditos</h2><p class="sub">Saldo disponível nesta sessão do gerador.</p><div class="stat"><div class="label">Saldo atual</div><div class="num">${brl(balance)}</div></div><p>Os créditos são descontados ao gerar keys. Para adicionar ou retirar créditos de usuários, use o painel FAEL MODS conectado ao mesmo sistema de armazenamento.</p><button onclick="switchPage('Keys')">Voltar ao gerador de Keys</button>`
+ };
+ other.innerHTML=content[page]||`<h2>${page}</h2><p>Seção selecionada.</p>`;
+}
+document.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));b.classList.add('active');switchPage(b.dataset.page)}));
+
+function loginSubmit(e){
+ e.preventDefault();
+ const u=document.getElementById('loginUser').value.trim();
+ const p=document.getElementById('loginPass').value;
+ let valid=false;
+ let matchedAccount=null;
+ try{const accounts=JSON.parse(localStorage.getItem('devid_cheats_accounts_v1')||'[]');matchedAccount=Array.isArray(accounts)?accounts.find(a=>String(a.user||'').trim().toLowerCase()===u.toLowerCase()&&String(a.password||'')===p&&a.status==='Ativo'):null;valid=!!matchedAccount;}catch(err){}
+ if(valid){
+  currentUser=u;
+  if(!loadUserState()){keys=[];balance=Math.max(0,Number(matchedAccount.credit)||0);saveUserState();render();}
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('loginError').style.display='none';
+  notify('Login realizado.');
+ }else{document.getElementById('loginError').style.display='block'}
+ return false;
+}
+
+// Não carregar dados de demonstração antes do login: cada usuário tem seu próprio gerador.
+</script>
+</body>
+</html>
